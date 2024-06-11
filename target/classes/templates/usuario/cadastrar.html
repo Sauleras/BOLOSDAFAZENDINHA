@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bolos da Fazendinha</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  </head>
+  <body>
+  	<div class="container" style="max-width: 600px;">
+  		<h1 class="text-center">Bolos da Fazendinha</h1>
+  		<div class="card">
+  			<div class="card-body">
+	  			<h2>Cadastro de Usuários</h2>
+				<form action="/cadastrarUsuario/adicionar" th:object="${usuarioDto}" method="post">
+				<div class="row justify-content-center mb-3">
+				    <div class="col-8">
+				    	<select class="form-select" th:id="selectPerfil" th:value="${usuarioDto.perfil}" th:name="perfil">
+			                <option value="">Selecione</option>
+			                <option 
+			                	th:each="tpPerfil : ${T(com.bolodafazendinha.bolodafazendinha.enums.PerfilUsuarioEnum).values()}"
+			                	th:value="${tpPerfil}"
+			                	th:text="${tpPerfil}"
+			                	th:selected="${usuarioDto.perfil != null && usuarioDto.perfil.toString() == tpPerfil.toString()}">
+			                </option>
+			            </select>
+			            <p th:if="${#fields.hasErrors('perfil')}" th:errorclass="text-danger" th:errors="${usuarioDto.perfil}" class="text-danger"></p>
+				    </div>
+				  </div>
+				  <div class="row justify-content-center mb-3">
+				    <div class="col-8">
+				    	<div class="input-group">
+				    		<span class="input-group-text"><i class="bi bi-person"></i></span>
+					      	<input type="text" class="form-control" placeholder="CPF" th:id="cpf" th:value="${usuarioDto.cpf}" th:name="cpf">
+				    	</div>
+					    <p th:if="${#fields.hasErrors('cpf')}" th:errorclass="text-danger" th:errors="${usuarioDto.cpf}" class="text-danger"></p>
+				    </div>
+				  </div>
+				  <div class="row justify-content-center mb-3">
+				    <div class="col-8">
+				    	<div class="input-group">
+					      <span class="input-group-text"><i class="bi bi-key"></i></span>
+					      <input type="password" class="form-control" placeholder="Senha" th:id="senha" th:value="${usuarioDto.senha}" th:name="senha">
+				    	</div>
+				    	<p th:if="${#fields.hasErrors('senha')}" th:errorclass="text-danger" th:errors="${usuarioDto.senha}" class="text-danger"></p>
+				    </div>
+				  </div>
+				  <div class="row text-end">
+				    <div class="d-flex justify-content-end">		    	
+			            <button type="submit" class="btn btn-primary" style="padding: 5px 50px;margin-right: 5px"><strong>Cadastrar</strong></button>
+			            <a href="/menu" class="btn btn-secondary" style="padding: 5px 50px;"><strong>Voltar</strong></a>
+			        </div>
+				  </div>
+				</form> 
+			</div>
+  		</div>
+  	</div>  
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>

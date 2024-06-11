@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bolos da Fazendinha</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+    	<h1 class="text-center">Bolos da Fazendinha</h1>
+	  <div class="row">
+		  <form action="/vendaCusto/adicionar" th:object="${vendaCustoDto}" method="post">
+		    <div class="row">
+		        <div class="col">
+		            <label for="selectTipoCadastro" class="form-label">Tipo de cadastro</label>
+		            <select class="form-select mb-2" th:id="selectTipoCadastro" th:value="${vendaCustoDto.tipoCadastro}" th:name="tipoCadastro">
+		                <option value="">Selecione</option>
+		                <option 
+		                	th:each="tpCad : ${T(com.bolodafazendinha.bolodafazendinha.enums.TipoCadastroEnum).values()}"
+		                	th:value="${tpCad}"
+		                	th:text="${tpCad}"
+		                	th:selected="${vendaCustoDto.tipoCadastro != null && vendaCustoDto.tipoCadastro.toString() == tpCad.toString()}">
+		                </option>
+		            </select>
+		            <p th:if="${#fields.hasErrors('tipoCadastro')}" th:errorclass="text-danger" th:errors="${vendaCustoDto.tipoCadastro}" class="text-danger"></p>
+		        </div>
+		        <div class="col">
+		            <label for="descricaoCadastro" class="form-label">Nome do Produto ou Cliente</label>
+		            <input type="text" class="form-control mb-2" th:id="descricaoCadastro" th:value="${vendaCustoDto.descricaoProdutoCliente}" th:name="descricaoProdutoCliente">
+		            <p th:if="${#fields.hasErrors('descricaoProdutoCliente')}" th:errorclass="text-danger" th:errors="${vendaCustoDto.descricaoProdutoCliente}" class="text-danger"></p>
+		        </div>
+		    </div>
+		    <div class="row">
+		        <div class="col">
+		            <label for="dataVendaCusto" class="form-label">Data da Venda/Custo</label>
+		            <input type="date" class="form-control mb-2" 
+		            	th:id="dataVendaCusto" 
+		            	th:value="${#dates.format(vendaCustoDto.dataVendaCusto, 'yyyy-MM-dd')}" 
+		            	th:name="dataVendaCusto" 
+		            	th:errorclass="text-danger">
+		            <p th:if="${#fields.hasErrors('dataVendaCusto')}" th:errors="${vendaCustoDto.dataVendaCusto}" class="text-danger"></p>
+		        </div>
+		        <div class="col">
+		            <label for="valor" class="form-label">Valor</label>
+		            <div class="input-group mb-3">
+		                <span class="input-group-text">R$</span>
+		                <input type="number" class="form-control" th:id="valor" th:value="${vendaCustoDto.valor}" th:name="valor">
+		            </div>
+		            <p th:if="${#fields.hasErrors('valor')}" th:errorclass="text-danger" th:errors="${vendaCustoDto.valor}" class="text-danger"></p>
+		        </div>
+		    </div>
+		    <div class="row">
+		        <div class="d-flex justify-content-end">		    	
+		            <button type="submit" class="btn btn-primary" style="padding: 5px 50px;margin-right: 5px"><strong>Salvar</strong></button>
+		            <a href="/menu" class="btn btn-secondary" style="padding: 5px 50px;"><strong>Voltar</strong></a>
+		        </div>
+		    </div>
+		    <input type="hidden" th:field="${vendaCustoDto.id}" />
+		</form>
+		  
+	  </div>
+	</div>
+	<div class="container text-center">
+	  <div class="row">
+	  	<table class="table">
+		  <thead>
+		    <tr>
+		      <th scope="col">Tipo de cadastro</th>
+		      <th scope="col">Nome do produto ou cliente</th>
+		      <th scope="col">Data da venda/custo</th>
+		      <th scope="col">Valor</th>
+		      <th scope="col">Ações</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr th:each="vendaCusto : ${vendasCustos}">
+		      <td th:text="${vendaCusto.tipoCadastro}"></td>
+		      <td th:text="${vendaCusto.descricaoProdutoCliente}"></td>
+		      <td th:text="${#dates.format(vendaCusto.dataVendaCusto, 'dd/MM/yyyy')}"></td>
+		      <td th:text="${vendaCusto.valor}"></td>
+		      <td>
+		      	<a class="btn btn-danger btn-sm"
+		      		th:href="@{/vendaCusto/excluir(id=${vendaCusto.id})}"
+		      		onclick="return confirm('Tem certeza que deseja excluir esse cadastro?')">Excluir</a>
+				<a class="btn btn-primary btn-sm"
+					th:href="@{/vendaCusto/editar(id=${vendaCusto.id})}">Alterar</a>
+			  </td>
+		    </tr>
+		  </tbody>
+		</table>
+	  </div>
+	</div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>

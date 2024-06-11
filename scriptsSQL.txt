@@ -1,0 +1,46 @@
+CREATE DATABASE bolodafazendinha;
+
+CREATE TABLE usuario (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    cpf VARCHAR(255) NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    perfil VARCHAR(50),
+    data_criado TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    data_alterado TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE venda_custo (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    tipo_cadastro VARCHAR(50),
+    descricao_produto_cliente VARCHAR(255),
+    data_venda_custo TIMESTAMP,
+    valor BIGINT,
+    registro_excluido VARCHAR(3),
+    produto_cliente VARCHAR(50),
+    data_criado TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    data_alterado TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    data_excluido TIMESTAMP
+);
+
+DELIMITER //
+
+CREATE PROCEDURE calcular_total_vendas_custos_anual()
+BEGIN
+    SELECT 
+        ano,
+        (total_produto - total_cliente) AS total_valor
+    FROM (
+        SELECT 
+            DATE_FORMAT(data_venda_custo, '%Y') AS ano,
+            SUM(CASE WHEN produto_cliente = 'PRODUTO' THEN valor ELSE 0 END) AS total_produto,
+            SUM(CASE WHEN produto_cliente = 'CLIENTE' THEN valor ELSE 0 END) AS total_cliente
+        FROM 
+            venda_custo
+        WHERE 
+            (registro_excluido IS NULL OR registro_excluido = 'NAO')
+        GROUP BY 
+            ano
+    ) AS subconsulta;
+END //
+
+DELIMITER ;
